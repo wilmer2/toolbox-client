@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { ButtonReload } from '../components/ui/ButtonReload'
-import { fetchFiles, selectFileState, resetState } from '../features/file/files'
+import { fetchFiles, selectFileState } from '../features/file/files'
 import { FileTable } from '../components/files/FileTable'
 import { Loader } from '../components/ui/Loader'
 import { useQuery } from '../hooks/useQuery'
@@ -17,16 +17,8 @@ export const FileContainer = () => {
   }
 
   useEffect(() => {
-    if (status === 'idle' || fileName) {
-      dispatch(fetchFiles({ fileName }))
-    }
-
-    return () => {
-      if (fileName) {
-        dispatch(resetState())
-      }
-    }
-  }, [])
+    dispatch(fetchFiles({ fileName }))
+  }, [fileName])
 
   let content = <Loader />
 
