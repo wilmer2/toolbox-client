@@ -7,34 +7,35 @@ const initialState = {
   data: []
 }
 
-export const fetchFiles = createAsyncThunk('files/fetchFiles', async () => {
-  const response = await client.get('/files/data')
+export const fetchFileNames = createAsyncThunk('files/fetchFileNames', async () => {
+  const response = await client.get('/files/list')
 
   return response?.data
 })
 
-export const fileSlice = createSlice({
-  name: 'files',
+export const fileNamesSlice = createSlice({
+  name: 'fileNames',
   initialState,
   reducers: {
+
   },
   extraReducers (builder) {
-    builder.addCase(fetchFiles.pending, (state) => {
+    builder.addCase(fetchFileNames.pending, (state) => {
       state.status = 'loading'
       state.error = null
     })
-      .addCase(fetchFiles.fulfilled, (state, action) => {
+      .addCase(fetchFileNames.fulfilled, (state, action) => {
         state.status = 'succeeded'
 
         state.data = action.payload
       })
-      .addCase(fetchFiles.rejected, (state, action) => {
+      .addCase(fetchFileNames.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.error
       })
   }
 })
 
-export const selectFileState = (state) => state.files
+export const selectFileNamesState = (state) => state.fileNames
 
-export default fileSlice.reducer
+export default fileNamesSlice.reducer
