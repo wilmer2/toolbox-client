@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Alert from 'react-bootstrap/Alert'
 import Table from 'react-bootstrap/Table'
 
@@ -13,10 +14,17 @@ export const FileTable = ({ files, selectedFile }) => {
 
   let content = (
     <Alert variant='dark'>
-      {selectedFile ? `No hay columnas para el archivo ${selectedFile}` : 'No hay csv generados '}
-
+      No hay csv generados
     </Alert>
   )
+
+  if (!files.length && selectedFile) {
+    content = (
+      <Alert variant='dark'>
+        No hay columnas para el archivo {selectedFile}  <Link to='/filenames'>Ver archivos</Link>
+      </Alert>
+    )
+  }
 
   if (files.length) {
     content = (

@@ -4,7 +4,6 @@ import ListGroup from 'react-bootstrap/ListGroup'
 export const FileList = ({ fileNames }) => {
   const renderItem = (fileName) => (
     <ListGroup.Item key={fileName}>
-
       <Link to={`/?fileName=${fileName}`} className='text-decoration-none'>{fileName}</Link>
     </ListGroup.Item>
   )
