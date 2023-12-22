@@ -1,22 +1,28 @@
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { requestStarted } from '../features/file/files'
+import { fetchFiles, selectFileState } from '../features/file/files'
 import { FileTable } from '../components/files/FileTable'
+import { Loader } from '../components/ui/Loader'
 
 export const FileContainer = () => {
-  const fileState = useSelector((state) => state.files)
+  const { status, data } = useSelector(selectFileState)
   const dispatch = useDispatch()
 
-  console.log('*** file state ***', fileState)
-
   useEffect(() => {
-    dispatch(requestStarted())
+    if (status === 'idle') {
+      dispatch(fetchFiles())
+    }
   }, [])
+
+  let content = <Loader />
+
+  if (status === 'succeeded') {
+    content = <FileTable files={data} />
+  }
 
   return (
     <>
-      <FileTable />
-
+      {content}
     </>
   )
 }

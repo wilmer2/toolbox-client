@@ -1,30 +1,44 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import client from '../../api/client'
 
 const initialState = {
   error: null,
-  loading: false,
+  status: 'idle',
   data: []
 }
+
+export const fetchFiles = createAsyncThunk('files/fetchFiles', async () => {
+  const response = await client.get('/files/data')
+
+  return response?.data
+})
 
 export const fileSlice = createSlice({
   name: 'files',
   initialState,
   reducers: {
-    requestStarted: (state) => {
-      state.loading = true
-      state.error = null
-    },
-    requestFailed: (state, action) => {
-      state.loading = false
-      state.error = action.payload
-    },
     dataReceived: (state, action) => {
       state.loading = false
       state.data = action.payload
     }
+  },
+  extraReducers (builder) {
+    builder.addCase(fetchFiles.pending, (state) => {
+      state.status = 'loading'
+    })
+      .addCase(fetchFiles.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+
+        state.data = action.payload
+      })
+      .addCase(fetchFiles.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.error
+      })
   }
 })
 
-export const { requestStarted, requestFailed, dataReceived } = fileSlice.actions
+export const { dataReceived } = fileSlice.actions
+export const selectFileState = (state) => state.files
 
 export default fileSlice.reducer

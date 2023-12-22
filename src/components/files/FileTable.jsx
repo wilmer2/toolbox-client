@@ -1,6 +1,15 @@
 import Table from 'react-bootstrap/Table'
 
-export const FileTable = () => {
+export const FileTable = ({ files }) => {
+  const renderItem = ({ file, text, number, hex }) => (
+    <tr key={hex}>
+      <td>{file}</td>
+      <td>{text}</td>
+      <td>{number}</td>
+      <td>{hex}</td>
+    </tr>
+  )
+
   return (
     <Table striped bordered hover size='sm'>
       <thead>
@@ -12,12 +21,9 @@ export const FileTable = () => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>file1.csv</td>
-          <td>RgTya</td>
-          <td>64075909</td>
-          <td>Loremipsum</td>
-        </tr>
+        {
+          files.map((file) => renderItem(file))
+        }
       </tbody>
     </Table>
   )
