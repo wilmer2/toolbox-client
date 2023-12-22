@@ -25,6 +25,7 @@ export const fileSlice = createSlice({
   extraReducers (builder) {
     builder.addCase(fetchFiles.pending, (state) => {
       state.status = 'loading'
+      state.error = null
     })
       .addCase(fetchFiles.fulfilled, (state, action) => {
         state.status = 'succeeded'
