@@ -7,8 +7,10 @@ const initialState = {
   data: []
 }
 
-export const fetchFiles = createAsyncThunk('files/fetchFiles', async () => {
-  const response = await client.get('/files/data')
+export const fetchFiles = createAsyncThunk('files/fetchFiles', async (params) => {
+  const fileName = params?.fileName ?? ''
+
+  const response = await client.get(`/files/data?fileName=${fileName}`)
 
   return response?.data
 })
@@ -17,6 +19,11 @@ export const fileSlice = createSlice({
   name: 'files',
   initialState,
   reducers: {
+    resetState: (state) => {
+      state.error = null
+      state.status = 'idle'
+      state.data = []
+    }
   },
   extraReducers (builder) {
     builder.addCase(fetchFiles.pending, (state) => {
@@ -36,5 +43,6 @@ export const fileSlice = createSlice({
 })
 
 export const selectFileState = (state) => state.files
+export const { resetState } = fileSlice.actions
 
 export default fileSlice.reducer
